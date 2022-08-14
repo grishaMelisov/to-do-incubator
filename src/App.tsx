@@ -15,6 +15,9 @@ function App() {
             <input type='checkbox' checked={true} /> <span>HTML&CSS</span>
           </li>
           <li>
+            <input type='checkbox' checked={true} /> <span>GIT</span>
+          </li>
+          <li>
             <input type='checkbox' checked={true} /> <span>JS</span>
           </li>
           <li>
