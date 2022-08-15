@@ -13,6 +13,7 @@ function App() {
     { id: 2, title: 'I am Happy', isDone: false },
     { id: 3, title: 'Yo', isDone: false },
   ]
+
   return (
     <div className='App'>
       <Todo title={'This week'} tasks={tasks1} />

@@ -1,16 +1,16 @@
 import React from 'react'
 
-type TodolistType = {
+type TodoProps = {
   title: string
-  tasks: Array<TaskType>
+  tasks: Array<ArrTypes>
 }
-type TaskType = {
+type ArrTypes = {
   id: number
   title: string
   isDone: boolean
 }
 
-function Todo(props: TodolistType) {
+function Todo(props: TodoProps) {
   return (
     <div>
       <h3>{props.title}</h3>
@@ -27,8 +27,10 @@ function Todo(props: TodolistType) {
             </li>
           )
         })}
-
         {/* <li>
+          <input type='checkbox' checked={true} /> <span>GIT</span>
+        </li>
+        <li>
           <input type='checkbox' checked={true} /> <span>GIT</span>
         </li>
         <li>
