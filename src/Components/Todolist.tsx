@@ -3,9 +3,10 @@ import React from 'react'
 type TodoPropsType = {
   title: string
   tasks: Array<TasksArrayType>
+  active: (activator: 'all' | 'active' | 'completed') => void
 }
 
-type TasksArrayType = {
+export type TasksArrayType = {
   id: number
   title: string
   isDone: boolean
@@ -30,9 +31,9 @@ function Todo(props: TodoPropsType) {
         })}
       </ul>
       <div>
-        <button>All</button>
-        <button>Active</button>
-        <button>Completed</button>
+        <button onClick={() => props.active('all')}>All</button>
+        <button onClick={() => props.active('active')}>Active</button>
+        <button onClick={() => props.active('completed')}>Completed</button>
       </div>
     </div>
   )
