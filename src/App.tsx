@@ -3,21 +3,15 @@ import './App.css'
 import Todo from './Components/Todolist'
 
 function App() {
-  const tasks1 = [
+  const tasks = [
     { id: 1, title: 'HTML&CSS', isDone: true },
     { id: 2, title: 'JS', isDone: true },
     { id: 3, title: 'ReactJS', isDone: false },
   ]
-  const tasks2 = [
-    { id: 1, title: 'Hello world', isDone: true },
-    { id: 2, title: 'I am Happy', isDone: false },
-    { id: 3, title: 'Yo', isDone: false },
-  ]
 
   return (
     <div className='App'>
-      <Todo title={'This week'} tasks={tasks1} />
-      <Todo title={'This month'} tasks={tasks2} />
+      <Todo title={'This week'} tasks={tasks} />
     </div>
   )
 }
