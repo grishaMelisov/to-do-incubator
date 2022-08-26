@@ -19,15 +19,7 @@ function Todo(props: TodoProps) {
         <button>+</button>
       </div>
       <ul>
-        {props.tasks.map((item) => {
-          return (
-            <li>
-              <input type='checkbox' checked={item.isDone} />
-              <span>{item.title}</span>
-            </li>
-          )
-        })}
-        {/* <li>
+        <li>
           <input type='checkbox' checked={true} /> <span>GIT</span>
         </li>
         <li>
@@ -38,7 +30,7 @@ function Todo(props: TodoProps) {
         </li>
         <li>
           <input type='checkbox' checked={false} /> <span>React</span>
-        </li> */}
+        </li>
       </ul>
       <div>
         <button>All</button>
