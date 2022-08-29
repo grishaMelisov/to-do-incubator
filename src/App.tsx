@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
+import { v1 } from 'uuid'
 import './App.css'
 import Todo, { TasksArrayType } from './Components/Todolist'
 export type FilterTypes = 'all' | 'completed' | 'active'
 
 function App() {
   const [tasks, setTasks] = useState<Array<TasksArrayType>>([
-    { id: 1, title: 'HTML&CSS', isDone: true },
-    { id: 2, title: 'JS', isDone: true },
-    { id: 3, title: 'ReactJS', isDone: false },
+    { id: v1(), title: 'HTML&CSS', isDone: true },
+    { id: v1(), title: 'JS', isDone: true },
+    { id: v1(), title: 'ReactJS', isDone: false },
   ])
 
   const [filter, setFilter] = useState<FilterTypes>('all')
@@ -27,10 +28,27 @@ function App() {
     setFilter(value)
   }
 
-  function deleteTask(id: number) {
+  function deleteTask(id: string) {
     setTasks(tasks.filter((item) => item.id !== id))
   }
 
+  const addTask = (text: string) => {
+    const newTask: TasksArrayType = {
+      id: v1(),
+      title: text,
+      isDone: false,
+    }
+    setTasks([newTask, ...tasks])
+  }
+
+  const changeCheckBox = () => {
+    setTasks(
+      tasks.map((item: any) => {
+        if (item.isDone) return !item.isDone //надо править это говно
+        if (!item.isDone) return item.isDone
+      })
+    )
+  }
   return (
     <div className='App'>
       <Todo
@@ -38,6 +56,8 @@ function App() {
         tasks={filtratedTasks}
         filter={toFilter}
         delete={deleteTask}
+        addTask={addTask}
+        changeCheckBox={changeCheckBox}
       />
     </div>
   )
