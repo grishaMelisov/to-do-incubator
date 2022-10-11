@@ -4,10 +4,11 @@ import { FilterTypes } from '../App'
 type TodoPropsType = {
   title: string
   tasks: Array<TasksArrayType>
-  filter: (value: FilterTypes) => void
+  changeFilter: (value: FilterTypes) => void
   delete: (id: string) => void
   addTask: (text: string) => void
-  changeCheckBox: () => void
+  changeStatus: (taskId: string, isDone: boolean) => void
+  filter: FilterTypes
 }
 
 export type TasksArrayType = {
@@ -17,35 +18,49 @@ export type TasksArrayType = {
 }
 
 function Todo(props: TodoPropsType) {
-  const [inputText, setInputText] = useState('')
-
-  console.log(inputText)
+  const [title, setTitle] = useState('')
+  const [error, setError] = useState(false)
 
   const inputHandler = (event: ChangeEvent<HTMLInputElement>) =>
-    setInputText(event.currentTarget.value)
+    setTitle(event.currentTarget.value)
 
-  const buttonHandler = () => {
-    props.addTask(inputText)
-    setInputText('')
+  const addTask = () => {
+    if (title.trim() === '') return setError(true)
+    props.addTask(title)
+    setTitle('')
   }
 
   const keyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-    console.log(event)
-    if (event.key === 'Enter') buttonHandler()
+    setError(false)
+    if (event.key === 'Enter') addTask()
   }
 
   return (
     <div>
       <h3>{props.title}</h3>
       <div>
-        <input value={inputText} onChange={inputHandler} onKeyDown={keyDownHandler} />
-        <button onClick={buttonHandler}>add</button>
+        <input
+          className={error ? 'error' : ''}
+          value={title}
+          onChange={inputHandler}
+          onKeyDown={keyDownHandler}
+        />
+        <button onClick={addTask}>add</button>
+        {error && <div className='error-message'>field is required</div>}
       </div>
       <ul>
         {props.tasks.map((item) => {
+          const checkboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
+            props.changeStatus(item.id, event.currentTarget.checked)
+          }
+
           return (
-            <li key={item.id}>
-              <input type='checkbox' checked={item.isDone} onClick={() => props.changeCheckBox()} />
+            <li key={item.id} className={item.isDone ? 'is-done' : ''}>
+              <input
+                type='checkbox'
+                checked={item.isDone}
+                onChange={checkboxHandler}
+              />
               <span>{item.title}</span>
               <button onClick={() => props.delete(item.id)}>x</button>
             </li>
@@ -53,9 +68,24 @@ function Todo(props: TodoPropsType) {
         })}
       </ul>
       <div>
-        <button onClick={() => props.filter('all')}>All</button>
-        <button onClick={() => props.filter('active')}>Active</button>
-        <button onClick={() => props.filter('completed')}>Completed</button>
+        <button
+          className={props.filter === 'all' ? 'active-filter' : ''}
+          onClick={() => props.changeFilter('all')}
+        >
+          All
+        </button>
+        <button
+          className={props.filter === 'active' ? 'active-filter' : ''}
+          onClick={() => props.changeFilter('active')}
+        >
+          Active
+        </button>
+        <button
+          className={props.filter === 'completed' ? 'active-filter' : ''}
+          onClick={() => props.changeFilter('completed')}
+        >
+          Completed
+        </button>
       </div>
     </div>
   )

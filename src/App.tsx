@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { v1 } from 'uuid'
 import './App.css'
 import Todo, { TasksArrayType } from './Components/Todolist'
+
 export type FilterTypes = 'all' | 'completed' | 'active'
 
 function App() {
@@ -41,23 +42,23 @@ function App() {
     setTasks([newTask, ...tasks])
   }
 
-  const changeCheckBox = () => {
-    setTasks(
-      tasks.map((item: any) => {
-        if (item.isDone) return !item.isDone //надо править это говно
-        if (!item.isDone) return item.isDone
-      })
-    )
+  const changeStatus = (taskId: string, isDone: boolean) => {
+    let task = tasks.find((item) => item.id === taskId)
+    if (task) task.isDone = isDone
+
+    setTasks([...tasks])
   }
+
   return (
     <div className='App'>
       <Todo
         title={'This week'}
         tasks={filtratedTasks}
-        filter={toFilter}
+        changeFilter={toFilter}
         delete={deleteTask}
         addTask={addTask}
-        changeCheckBox={changeCheckBox}
+        changeStatus={changeStatus}
+        filter={filter}
       />
     </div>
   )
