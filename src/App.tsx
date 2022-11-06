@@ -64,4 +64,55 @@ function App() {
   )
 }
 
+const arr = {
+  pipeline_id: 4212961,
+  _embedded: {
+    contacts: [
+      {
+        first_name: 'Теееест',
+        last_name: 'Теееест Теееест',
+        custom_fields_values: [
+          {
+            field_code: 'PHONE',
+            values: [{ value: ' 7 (916) 036-35-01', enum_code: 'MOB' }],
+          },
+          {
+            field_code: 'EMAIL',
+            values: [{ value: 'tsudzuki@yandex.ru', enum_code: 'PRIV' }],
+          },
+          { field_id: 679691, values: [{ value: 'Теееест' }] },
+        ],
+      },
+    ],
+  },
+  custom_fields_values: [
+    { field_id: 688715, values: [{ value: '12' }] },
+    { field_id: 682031, values: [{ value: '' }] },
+    {
+      field_id: 688717,
+      values: [
+        {
+          value: 'https://storage.yandexcloud.net/smarent-public-storage/4d5a3838-34ae-4041-b18c-fa22caaf0210.docx',
+        },
+      ],
+    },
+    {
+      field_id: 688719,
+      values: [
+        {
+          value: 'https: //storage.yandexcloud.net/smarent-public-storage/1847326b-b8a1-47ea-970a-daa863cbad8a.docx',
+        },
+      ],
+    },
+    { field_id: 681113, values: [{ value: 'Telegram' }] },
+    { field_id: 681115, values: [{ value: '' }] },
+    { field_id: 681111, values: [{ value: 'Ничего дополнительно не нужно = 0' }] },
+    {
+      field_id: 511267,
+      values: [{ value: 'https: //smarent.com/podbor/lite/oferta/payment' }],
+    },
+  ],
+  responsible_user_id: 7842370,
+}
+
 export default App
