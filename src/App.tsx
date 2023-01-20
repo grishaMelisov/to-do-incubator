@@ -1,118 +1,127 @@
 import React, { useState } from 'react'
 import { v1 } from 'uuid'
 import './App.css'
+import { AddItemForm } from './Components/AddItemForm'
 import Todo, { TasksArrayType } from './Components/Todolist'
 
 export type FilterTypes = 'all' | 'completed' | 'active'
+type TodoListType = {
+  id: string
+  title: string
+  filter: FilterTypes
+}
+type TasksStateType = {
+  [key: string]: Array<TasksArrayType>
+}
 
 function App() {
-  const [tasks, setTasks] = useState<Array<TasksArrayType>>([
-    { id: v1(), title: 'HTML&CSS', isDone: true },
-    { id: v1(), title: 'JS', isDone: true },
-    { id: v1(), title: 'ReactJS', isDone: false },
-  ])
-
-  const [filter, setFilter] = useState<FilterTypes>('all')
-
-  let filtratedTasks = tasks
-  if (filter === 'completed') {
-    filtratedTasks = tasks.filter((item) => item.isDone)
-  }
-  if (filter === 'active') {
-    filtratedTasks = tasks.filter((item) => !item.isDone)
-  }
-  if (filter === 'all') {
-    filtratedTasks = tasks
+  function deleteTask(id: string, todolistId: string) {
+    let tasks = tasksObj[todolistId]
+    let filtratedTasks = tasks.filter((item) => item.id !== id)
+    tasksObj[todolistId] = filtratedTasks
+    setTasks({ ...tasksObj })
   }
 
-  function toFilter(value: FilterTypes) {
-    setFilter(value)
-  }
-
-  function deleteTask(id: string) {
-    setTasks(tasks.filter((item) => item.id !== id))
-  }
-
-  const addTask = (text: string) => {
-    const newTask: TasksArrayType = {
+  const addTask = (text: string, todolistId: string) => {
+    const task: TasksArrayType = {
       id: v1(),
       title: text,
       isDone: false,
     }
-    setTasks([newTask, ...tasks])
+    let tasks = tasksObj[todolistId]
+    let newTasks = [task, ...tasks]
+    tasksObj[todolistId] = newTasks
+
+    setTasks({ ...tasksObj })
   }
 
-  const changeStatus = (taskId: string, isDone: boolean) => {
+  const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
+    let tasks = tasksObj[todolistId]
     let task = tasks.find((item) => item.id === taskId)
-    if (task) task.isDone = isDone
+    if (task) {
+      task.isDone = isDone
+      setTasks({ ...tasksObj })
+    }
+  }
 
-    setTasks([...tasks])
+  function changeFilter(value: FilterTypes, todolistId: string) {
+    let todolist = todolists.find((e) => e.id === todolistId)
+    if (todolist) {
+      todolist.filter = value
+      setTodoLists([...todolists])
+    }
+    // setTodoLists([...todolists])
+  }
+
+  const todolistId1 = v1()
+  const todolistId2 = v1()
+
+  let [todolists, setTodoLists] = useState<Array<TodoListType>>([
+    {
+      id: todolistId1,
+      title: 'what to learn',
+      filter: 'all',
+    },
+    {
+      id: todolistId2,
+      title: 'what to buy',
+      filter: 'all',
+    },
+  ])
+
+  const [tasksObj, setTasks] = useState<TasksStateType>({
+    [todolistId1]: [
+      { id: v1(), title: 'HTML&CSS', isDone: true },
+      { id: v1(), title: 'JS', isDone: true },
+      { id: v1(), title: 'ReactJS', isDone: false },
+    ],
+    [todolistId2]: [
+      { id: v1(), title: 'Book', isDone: false },
+      { id: v1(), title: 'Milk', isDone: true },
+    ],
+  })
+
+  const addTodoList = (title: string) => {
+    let newTodoList: TodoListType = {
+      id: v1(),
+      title: title,
+      filter: 'all',
+    }
+    setTodoLists([...todolists, newTodoList])
+    setTasks({ ...tasksObj, [newTodoList.id]: [] })
   }
 
   return (
     <div className='App'>
-      <Todo
-        title={'This week'}
-        tasks={filtratedTasks}
-        changeFilter={toFilter}
-        delete={deleteTask}
-        addTask={addTask}
-        changeStatus={changeStatus}
-        filter={filter}
-      />
+      <AddItemForm addItem={addTodoList} />
+      {todolists.map((e) => {
+        let filtratedTasks = tasksObj[e.id]
+        if (e.filter === 'completed') {
+          filtratedTasks = tasksObj[e.id].filter((item) => item.isDone)
+        }
+        if (e.filter === 'active') {
+          filtratedTasks = tasksObj[e.id].filter((item) => !item.isDone)
+        }
+        if (e.filter === 'all') {
+          filtratedTasks = tasksObj[e.id]
+        }
+
+        return (
+          <Todo
+            key={e.id}
+            id={e.id}
+            title={e.title}
+            tasks={filtratedTasks}
+            changeFilter={changeFilter}
+            delete={deleteTask}
+            addTask={addTask}
+            changeStatus={changeStatus}
+            filter={e.filter}
+          />
+        )
+      })}
     </div>
   )
-}
-
-const arr = {
-  pipeline_id: 4212961,
-  _embedded: {
-    contacts: [
-      {
-        first_name: 'Теееест',
-        last_name: 'Теееест Теееест',
-        custom_fields_values: [
-          {
-            field_code: 'PHONE',
-            values: [{ value: ' 7 (916) 036-35-01', enum_code: 'MOB' }],
-          },
-          {
-            field_code: 'EMAIL',
-            values: [{ value: 'tsudzuki@yandex.ru', enum_code: 'PRIV' }],
-          },
-          { field_id: 679691, values: [{ value: 'Теееест' }] },
-        ],
-      },
-    ],
-  },
-  custom_fields_values: [
-    { field_id: 688715, values: [{ value: '12' }] },
-    { field_id: 682031, values: [{ value: '' }] },
-    {
-      field_id: 688717,
-      values: [
-        {
-          value: 'https://storage.yandexcloud.net/smarent-public-storage/4d5a3838-34ae-4041-b18c-fa22caaf0210.docx',
-        },
-      ],
-    },
-    {
-      field_id: 688719,
-      values: [
-        {
-          value: 'https: //storage.yandexcloud.net/smarent-public-storage/1847326b-b8a1-47ea-970a-daa863cbad8a.docx',
-        },
-      ],
-    },
-    { field_id: 681113, values: [{ value: 'Telegram' }] },
-    { field_id: 681115, values: [{ value: '' }] },
-    { field_id: 681111, values: [{ value: 'Ничего дополнительно не нужно = 0' }] },
-    {
-      field_id: 511267,
-      values: [{ value: 'https: //smarent.com/podbor/lite/oferta/payment' }],
-    },
-  ],
-  responsible_user_id: 7842370,
 }
 
 export default App
